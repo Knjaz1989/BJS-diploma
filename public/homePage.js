@@ -1,12 +1,13 @@
 logoutButton = new LogoutButton();
+
 logoutButton.action = () => {
 	ApiConnector.logout(
-		response => {
-			if (response.success) {
-				location.reload();
-			}
-		}
-	);
+    response => {
+      if (response.success) {
+        location.reload();
+      }
+    }
+  );
 }
 
 ApiConnector.current(
@@ -57,3 +58,16 @@ moneyManager.conversionMoneyCallback = data => {
 moneyManager.sendMoneyCallback = data => {
   ApiConnector.transferMoney(data, moneyCallback);
 };
+
+
+let favoritesWidget = new FavoritesWidget();
+
+ApiConnector.getFavorites(
+  response => {
+    if (response.success){
+      favoritesWidget.clearTable();
+      favoritesWidget.fillTable(response.data);
+      moneyManager.updateUsersList(response.data);
+    }
+  }
+);
