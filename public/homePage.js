@@ -12,7 +12,7 @@ logoutButton.action = () => {
 ApiConnector.current(
 	response => {
 		if (response.success) {
-			ProfileWidget.showProfile(response.data)
+			ProfileWidget.showProfile(response.data);
 		}
 	}
 );
@@ -33,3 +33,20 @@ let getCurrency = () => {
 
 getCurrency();
 setInterval(getCurrency, 60000);
+
+
+let moneyManager = new MoneyManager();
+
+moneyManager.addMoneyCallback = data => {
+  ApiConnector.addMoney(
+    data, 
+    (response) => {
+      if (response.success){
+        ProfileWidget.showProfile(response.data);
+        moneyManager.setMessage(response.success, "Успешно");
+      } else {
+        moneyManager.setMessage(response.success, response.error);
+      }
+    }
+  )
+};
