@@ -1,7 +1,7 @@
 logoutButton = new LogoutButton();
 logoutButton.action = () => {
 	ApiConnector.logout(
-		(response) => {
+		response => {
 			if (response.success) {
 				location.reload();
 			}
@@ -37,16 +37,19 @@ setInterval(getCurrency, 60000);
 
 let moneyManager = new MoneyManager();
 
-moneyManager.addMoneyCallback = data => {
-  ApiConnector.addMoney(
-    data, 
-    (response) => {
-      if (response.success){
-        ProfileWidget.showProfile(response.data);
-        moneyManager.setMessage(response.success, "Успешно");
-      } else {
-        moneyManager.setMessage(response.success, response.error);
-      }
-    }
-  )
+let moneyCallback = (response) => {
+  if (response.success){
+    ProfileWidget.showProfile(response.data);
+    moneyManager.setMessage(response.success, "Успешно");
+  } else {
+    moneyManager.setMessage(response.success, response.error);
+  }
 };
+
+moneyManager.addMoneyCallback = data => {
+  ApiConnector.addMoney(data, moneyCallback)
+};
+
+moneyManager.conversionMoneyCallback = data => {
+  ApiConnector.convertMoney(data, moneyCallback);
+}
