@@ -52,4 +52,8 @@ moneyManager.addMoneyCallback = data => {
 
 moneyManager.conversionMoneyCallback = data => {
   ApiConnector.convertMoney(data, moneyCallback);
-}
+};
+
+moneyManager.sendMoneyCallback = data => {
+  ApiConnector.transferMoney(data, moneyCallback);
+};
