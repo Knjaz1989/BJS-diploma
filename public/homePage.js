@@ -88,3 +88,17 @@ favoritesWidget.addUserCallback = data => {
     }
   );
 };
+
+favoritesWidget.removeUserCallback = data => {
+  ApiConnector.removeUserFromFavorites(
+    data,
+    response => {
+      if (response.success){
+        clearAddTableData(response.data);
+        moneyManager.setMessage(response.success, "Успешно");
+      } else {
+        moneyManager.setMessage(response.success, response.error);
+      }
+    }
+  );
+};
