@@ -66,6 +66,15 @@ let clearAddTableData = (data) => {
   favoritesWidget.fillTable(data);
   moneyManager.updateUsersList(data);
 };
+let widgetCallback = (response) => {
+  if (response.success){
+    clearAddTableData(response.data);
+    moneyManager.setMessage(response.success, "Успешно");
+  } else {
+    moneyManager.setMessage(response.success, response.error);
+  }
+};
+
 
 ApiConnector.getFavorites(
   response => {
@@ -78,27 +87,13 @@ ApiConnector.getFavorites(
 favoritesWidget.addUserCallback = data => {
   ApiConnector.addUserToFavorites(
     data,
-    response => {
-      if (response.success){
-        clearAddTableData(response.data);
-        moneyManager.setMessage(response.success, "Успешно");
-      } else {
-        moneyManager.setMessage(response.success, response.error);
-      }
-    }
+    widgetCallback
   );
 };
 
 favoritesWidget.removeUserCallback = data => {
   ApiConnector.removeUserFromFavorites(
     data,
-    response => {
-      if (response.success){
-        clearAddTableData(response.data);
-        moneyManager.setMessage(response.success, "Успешно");
-      } else {
-        moneyManager.setMessage(response.success, response.error);
-      }
-    }
+    widgetCallback
   );
 };
