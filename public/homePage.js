@@ -61,13 +61,30 @@ moneyManager.sendMoneyCallback = data => {
 
 
 let favoritesWidget = new FavoritesWidget();
+let clearAddTableData = (data) => {
+  favoritesWidget.clearTable();
+  favoritesWidget.fillTable(data);
+  moneyManager.updateUsersList(data);
+};
 
 ApiConnector.getFavorites(
   response => {
     if (response.success){
-      favoritesWidget.clearTable();
-      favoritesWidget.fillTable(response.data);
-      moneyManager.updateUsersList(response.data);
+      clearAddTableData(response.data);
     }
   }
 );
+
+favoritesWidget.addUserCallback = data => {
+  ApiConnector.addUserToFavorites(
+    data,
+    response => {
+      if (response.success){
+        clearAddTableData(response.data);
+        moneyManager.setMessage(response.success, "Успешно");
+      } else {
+        moneyManager.setMessage(response.success, response.error);
+      }
+    }
+  );
+};
