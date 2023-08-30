@@ -4,6 +4,7 @@ logoutButton.action = () => {
 	ApiConnector.logout(
     response => {
       if (response.success) {
+        clearInterval(intervalId);
         location.reload();
       }
     }
@@ -33,7 +34,7 @@ let getCurrency = () => {
 
 
 getCurrency();
-setInterval(getCurrency, 60000);
+let intervalId = setInterval(getCurrency, 60000);
 
 
 let moneyManager = new MoneyManager();
